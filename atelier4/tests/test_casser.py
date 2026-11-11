@@ -13,8 +13,10 @@ SANS_POIDS = {k: v for k, v in VALID.items() if k != "poids_kg"}  # VALID sans u
 CAS_REFUSES = [
     # (description, url, corps, code attendu)
     ("valeur absurde", "/v1/predict", {**VALID, "poids_kg": 99999}, 422),
-    # À VOUS : vos quatre autres cas (champ manquant, texte au lieu d'un nombre,
-    # champ en trop, mauvaise route). Pour une mauvaise route, le code attendu n'est pas 422.
+   ("champ manquant", "/v1/predict", SANS_POIDS, 422),
+    ("texte au lieu d'un nombre", "/v1/predict", {**VALID, "distance_km": "beaucoup"}, 422),
+    ("champ en trop", "/v1/predict", {**VALID, "couleur": "rouge"}, 422),
+    ("mauvaise route", "/v1/predictt", VALID, 404),
 ]
 
 @pytest.mark.parametrize("description, url, corps, attendu", CAS_REFUSES)
